@@ -20,7 +20,7 @@
   --border:       #e4e0dd;
   --shadow-card:  0 2px 16px rgba(0,0,0,0.07);
   --shadow-raise: 4px 0 18px rgba(0,0,0,0.09), -4px 0 18px rgba(0,0,0,0.09);
-  --header-h:     64px;
+  --header-h:     200px;
   --font-display: 'Montserrat', sans-serif;
   --font-body:    'Inter', sans-serif;
   --radius:       8px;
@@ -61,28 +61,23 @@ body {
 .header-brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   text-decoration: none;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  color: var(--offwhite);
-  transition: color var(--transition);
+  color: var(--white);
 }
-.header-brand:hover { color: var(--white); }
 
 .brand-logo {
-  height: 44px;  /* slightly taller than text */
+  height: 100px;
   width: auto;
-  filter: brightness(0) invert(1) opacity(0.72);
-  transition: filter var(--transition);
 }
-.header-brand:hover .brand-logo { filter: brightness(0) invert(1) opacity(1); }
 
 .brand-name {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.35rem;
+  font-size: 2.8rem;
   letter-spacing: 0.01em;
   text-shadow: 2px 2px 0px rgba(0,0,0,0.85);
   color: inherit;
@@ -93,34 +88,24 @@ body {
 .header-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 7px 16px;
+  gap: 10px;
+  padding: 12px 26px;
   background: transparent;
-  border: 1.5px solid var(--offwhite);
-  border-radius: var(--radius);
-  color: var(--offwhite);
+  border: 2px solid var(--white);
+  border-radius: 0;
+  color: var(--white);
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 0.82rem;
+  font-size: 1rem;
   letter-spacing: 0.08em;
   cursor: pointer;
   text-decoration: none;
-  transition: color var(--transition), border-color var(--transition);
   white-space: nowrap;
-}
-.header-btn:hover {
-  color: var(--white);
-  border-color: var(--white);
-}
-.header-btn:hover .btn-icon {
-  filter: brightness(0) invert(1) opacity(1);
 }
 
 .btn-icon {
-  height: 18px;
+  height: 26px;
   width: auto;
-  filter: brightness(0) invert(1) opacity(0.72);
-  transition: filter var(--transition);
 }
 
 /* ── Info Modal ───────────────────────────────── */
@@ -547,7 +532,7 @@ body {
 }
 
 @media (max-width: 640px) {
-  :root { --header-h: 56px; }
+  :root { --header-h: 120px; }
 
   .page-layout { flex-direction: column; }
 
@@ -561,15 +546,15 @@ body {
 
   .header-inner { padding: 0 14px; }
 
-  .brand-name { font-size: 1.1rem; }
-  .brand-logo { height: 36px; }
+  .brand-name { font-size: 1.6rem; }
+  .brand-logo { height: 60px; }
 
   .header-btn {
-    padding: 6px 10px;
-    font-size: 0.75rem;
-    gap: 5px;
+    padding: 8px 14px;
+    font-size: 0.82rem;
+    gap: 6px;
   }
-  .btn-icon { height: 15px; }
+  .btn-icon { height: 18px; }
 
   .debate-panel  { padding: 22px 16px 20px; }
   .member-bar    { padding: 9px 16px; }
