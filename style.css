@@ -91,9 +91,9 @@ body {
   gap: 10px;
   padding: 12px 26px;
   background: transparent;
-  border: 2px solid var(--white);
+  border: 2px solid var(--offwhite);
   border-radius: 0;
-  color: var(--white);
+  color: var(--offwhite);
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 1rem;
@@ -101,11 +101,21 @@ body {
   cursor: pointer;
   text-decoration: none;
   white-space: nowrap;
+  transition: color var(--transition), border-color var(--transition);
+}
+.header-btn:hover {
+  color: var(--white);
+  border-color: var(--white);
+}
+.header-btn:hover .btn-icon {
+  opacity: 1;
 }
 
 .btn-icon {
   height: 26px;
   width: auto;
+  opacity: 0.72;
+  transition: opacity var(--transition);
 }
 
 /* ── Info Modal ───────────────────────────────── */
@@ -472,6 +482,72 @@ body {
   font-size: 1rem;
   color: var(--text-main);
   margin-bottom: 16px;
+}
+
+.past-tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.past-tile {
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
+  padding: 16px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--bg-body);
+  transition: box-shadow var(--transition);
+}
+.past-tile:hover {
+  box-shadow: var(--shadow-card);
+}
+
+.past-tile-date {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.past-tile-claim {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--text-main);
+  line-height: 1.4;
+  font-style: italic;
+  flex: 1;
+}
+
+.past-tile-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.past-tile-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.past-tile-value {
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+@media (max-width: 700px) {
+  .past-tiles {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ── Loading / spinner ────────────────────────── */
