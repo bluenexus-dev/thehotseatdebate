@@ -7,7 +7,7 @@
  * Configure BOT_API_URL below to match your Render service URL.
  */
 
-const BOT_API_URL = "https://thewhip-e9qu.onrender.com"; // ← change this
+const BOT_API_URL = "https://YOUR_RENDER_BOT_URL.onrender.com"; // ← change this
 
 const SIGNUP_URL  =
   "https://discord.com/channels/1519281420458000385/1519302584769183805";
@@ -142,11 +142,20 @@ function renderActiveDebate(state) {
 
 function renderError() {
   liveBadge.style.display = "none";
+  // Check if URL is still the placeholder
+  if (BOT_API_URL.includes("YOUR_RENDER_BOT_URL")) {
+    return `
+      <div class="no-debate">
+        <div class="no-debate-icon">🔧</div>
+        <h3>Bot URL not configured</h3>
+        <p>Open <code>script.js</code> and replace <code>YOUR_RENDER_BOT_URL</code> with your Render service URL.</p>
+      </div>`;
+  }
   return `
     <div class="no-debate">
-      <div class="no-debate-icon">⚠️</div>
-      <h3>Couldn't reach the server</h3>
-      <p>The bot may be offline or starting up. Retrying shortly.</p>
+      <div class="no-debate-icon">🎙️</div>
+      <h3>No Current Debate</h3>
+      <p>The bot is starting up or there's no active session. Check back soon.</p>
     </div>`;
 }
 
@@ -171,7 +180,7 @@ async function update() {
 
   if (!data) {
     debateContent.innerHTML = renderError();
-    memberCountEl.textContent = "Members unavailable";
+    memberCountEl.textContent = "— Members";
     return;
   }
 
