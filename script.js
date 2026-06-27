@@ -162,10 +162,14 @@ function renderError() {
 // ── Fetch & render ────────────────────────────────────────────────────────────
 
 async function fetchState() {
+  // Skip if URL is still placeholder
+  if (!BOT_API_URL || BOT_API_URL.includes("YOUR_RENDER")) return null;
   try {
-    const res = await fetch(`${BOT_API_URL}/state`, {
-      cache: "no-store",
-      signal: AbortSignal.timeout(8000),
+    const url = `${BOT_API_URL.replace(/\/$/, "")}/state?t=${Date.now()}`;
+    const res = await fetch(url, {
+      method: "GET",
+      cache:  "no-store",
+      signal: AbortSignal.timeout(10000),
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return await res.json();
@@ -174,6 +178,41 @@ async function fetchState() {
     return null;
   }
 }
+
+// ── Past debates renderer ─────────────────────────────────────────────────────
+
+function renderPastDebates(debates) {
+  const el = document.getElementById("past-debates");
+  if (!el) return;
+
+  if (!debates || debates.length === 0) {
+    el.innerHTML = `<p class="muted-text">No recent debates logged yet.</p>`;
+    return;
+  }
+
+  const tiles = debates.map(d => {
+    const opposers = (d.opposers && d.opposers.length)
+      ? d.opposers.map(o => escHtml(o)).join(", ")
+      : "None";
+    return `
+      <div class="past-tile">
+        <div class="past-tile-date">${escHtml(d.date || "")}</div>
+        <div class="past-tile-claim">"${escHtml(d.claim || "—")}"</div>
+        <div class="past-tile-row">
+          <span class="past-tile-label">Defender</span>
+          <span class="past-tile-value">${escHtml(d.defender || "—")}</span>
+        </div>
+        <div class="past-tile-row">
+          <span class="past-tile-label">Opposer(s)</span>
+          <span class="past-tile-value">${opposers}</span>
+        </div>
+      </div>`;
+  }).join("");
+
+  el.innerHTML = `<div class="past-tiles">${tiles}</div>`;
+}
+
+// ── Main update ────────────────────────────────────────────────────────────────
 
 async function update() {
   const data = await fetchState();
@@ -197,6 +236,9 @@ async function update() {
   } else {
     debateContent.innerHTML = renderNoDebate();
   }
+
+  // Past debates
+  renderPastDebates(data.past_debates || []);
 }
 
 // Initial load + poll every 15s
