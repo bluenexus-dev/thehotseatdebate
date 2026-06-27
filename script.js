@@ -7,7 +7,7 @@
  * Configure BOT_API_URL below to match your Render service URL.
  */
 
-const BOT_API_URL = "https://YOUR_RENDER_BOT_URL.onrender.com"; // ← change this
+const BOT_API_URL = "https://thewhip-e9qu.onrender.com"; // ← change this
 
 const SIGNUP_URL  =
   "https://discord.com/channels/1519281420458000385/1519302584769183805";
