@@ -7,7 +7,7 @@
  * Configure BOT_API_URL below to match your Render service URL.
  */
 
-const BOT_API_URL = "https://thewhip-e9qu.onrender.com"; // ← change this
+const BOT_API_URL = "https://YOUR_RENDER_BOT_URL.onrender.com"; // ← change this
 
 const SIGNUP_URL  =
   "https://discord.com/channels/1519281420458000385/1519302584769183805";
@@ -140,6 +140,26 @@ function renderActiveDebate(state) {
     </div>`;
 }
 
+function renderNextDebate(defender, claim) {
+  liveBadge.style.display = "none";
+  return `
+    <div class="active-debate">
+      <div class="debate-claim-card">
+        <div class="debate-claim-label">Next Debate — Claim Selected</div>
+        <div class="debate-claim-text">"${escHtml(claim)}"</div>
+      </div>
+      <div class="debate-roles" style="grid-template-columns:1fr">
+        <div class="role-card defender">
+          <div class="role-label">Defender</div>
+          <div class="role-name">${escHtml(defender)}</div>
+        </div>
+      </div>
+      <p style="font-size:0.85rem;color:var(--text-muted);margin-top:4px">
+        Debate hasn't started yet — stay tuned.
+      </p>
+    </div>`;
+}
+
 function renderError() {
   liveBadge.style.display = "none";
   // Check if URL is still the placeholder
@@ -231,6 +251,8 @@ async function update() {
   // Debate state
   if (data.active) {
     debateContent.innerHTML = renderActiveDebate(data);
+  } else if (data.chosen_claim && data.chosen_defender) {
+    debateContent.innerHTML = renderNextDebate(data.chosen_defender, data.chosen_claim);
   } else if (data.signup_open) {
     debateContent.innerHTML = renderSignups(data.signups, data.debate_date);
   } else {
