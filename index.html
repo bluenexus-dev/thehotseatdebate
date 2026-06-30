@@ -76,6 +76,33 @@
     </div>
   </div>
 
+  <!-- ═══════════════════════════════════ LEADERBOARD TAB ═══════════════════════════════════ -->
+  <button class="leaderboard-tab" id="leaderboard-tab" aria-label="Open leaderboard">
+    <span class="leaderboard-tab-text">LEADERBOARD</span>
+    <img src="images/icons/leaderboard.png" alt="" class="leaderboard-tab-icon" />
+  </button>
+
+  <!-- ═══════════════════════════════════ LEADERBOARD MODAL ═════════════════════════════════ -->
+  <div class="modal-overlay" id="leaderboard-overlay" role="dialog" aria-modal="true" aria-labelledby="leaderboard-title">
+    <div class="modal leaderboard-modal">
+      <button class="modal-close" id="leaderboard-close" aria-label="Close">&times;</button>
+      <h2 id="leaderboard-title">🏆 Leaderboard</h2>
+
+      <div id="leaderboard-content">
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <p>Loading standings…</p>
+        </div>
+      </div>
+
+      <div class="leaderboard-pagination" id="leaderboard-pagination" style="display:none">
+        <button class="lb-page-btn" id="lb-prev-btn" aria-label="Previous page">&larr;</button>
+        <span class="lb-page-label" id="lb-page-label">Page 1 of 1</span>
+        <button class="lb-page-btn" id="lb-next-btn" aria-label="Next page">&rarr;</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ════════════════════════════════════════ SIDE COLUMNS + BODY ══════════════════════════ -->
   <div class="page-layout">
     <div class="side-col left-col" aria-hidden="true"></div>
