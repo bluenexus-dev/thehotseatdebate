@@ -21,6 +21,108 @@ const modalOverlay   = document.getElementById("modal-overlay");
 const infoBtn        = document.getElementById("info-btn");
 const modalClose     = document.getElementById("modal-close");
 
+// ── Leaderboard modal ─────────────────────────────────────────────────────────
+const leaderboardTab     = document.getElementById("leaderboard-tab");
+const leaderboardOverlay = document.getElementById("leaderboard-overlay");
+const leaderboardClose   = document.getElementById("leaderboard-close");
+const leaderboardContent = document.getElementById("leaderboard-content");
+const lbPagination       = document.getElementById("leaderboard-pagination");
+const lbPageLabel        = document.getElementById("lb-page-label");
+const lbPrevBtn          = document.getElementById("lb-prev-btn");
+const lbNextBtn          = document.getElementById("lb-next-btn");
+
+let lbCurrentPage = 1;
+
+function openLeaderboard() {
+  leaderboardOverlay.classList.add("open");
+  document.body.style.overflow = "hidden";
+  lbCurrentPage = 1;
+  loadLeaderboardPage(lbCurrentPage);
+}
+
+function closeLeaderboard() {
+  leaderboardOverlay.classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+leaderboardTab.addEventListener("click", openLeaderboard);
+leaderboardClose.addEventListener("click", closeLeaderboard);
+leaderboardOverlay.addEventListener("click", (e) => {
+  if (e.target === leaderboardOverlay) closeLeaderboard();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && leaderboardOverlay.classList.contains("open")) closeLeaderboard();
+});
+
+lbPrevBtn.addEventListener("click", () => {
+  if (lbCurrentPage > 1) {
+    lbCurrentPage -= 1;
+    loadLeaderboardPage(lbCurrentPage);
+  }
+});
+lbNextBtn.addEventListener("click", () => {
+  lbCurrentPage += 1;
+  loadLeaderboardPage(lbCurrentPage);
+});
+
+async function fetchLeaderboard(page) {
+  if (!BOT_API_URL || BOT_API_URL.includes("YOUR_RENDER")) return null;
+  try {
+    const url = `${BOT_API_URL.replace(/\/$/, "")}/leaderboard?page=${page}&t=${Date.now()}`;
+    const res = await fetch(url, { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.warn("fetchLeaderboard error:", err);
+    return null;
+  }
+}
+
+function renderLeaderboardRows(entries, rankStart) {
+  if (!entries || entries.length === 0) {
+    return `<div class="lb-empty">No points have been awarded yet.</div>`;
+  }
+  const medals = { 1: "🥇", 2: "🥈", 3: "🥉" };
+  return entries.map((e, i) => {
+    const rank = rankStart + i;
+    const medal = medals[rank] || `#${rank}`;
+    return `
+      <div class="lb-row">
+        <span class="lb-rank">${medal}</span>
+        <span class="lb-name">${escHtml(e.username)}</span>
+        <span class="lb-points">${e.points} pt${e.points === 1 ? "" : "s"}</span>
+      </div>`;
+  }).join("");
+}
+
+async function loadLeaderboardPage(page) {
+  leaderboardContent.innerHTML = `
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading standings…</p>
+    </div>`;
+  lbPagination.style.display = "none";
+
+  const data = await fetchLeaderboard(page);
+
+  if (!data) {
+    leaderboardContent.innerHTML = `<div class="lb-empty">Couldn't load the leaderboard. Try again shortly.</div>`;
+    return;
+  }
+
+  const rankStart = (data.page - 1) * 10 + 1;
+  leaderboardContent.innerHTML = renderLeaderboardRows(data.entries, rankStart);
+
+  if (data.total_pages > 1 || data.entries.length > 0) {
+    lbPagination.style.display = "flex";
+    lbPageLabel.textContent = `Page ${data.page} of ${data.total_pages}`;
+    lbPrevBtn.disabled = data.page <= 1;
+    lbNextBtn.disabled = data.page >= data.total_pages;
+  }
+
+  lbCurrentPage = data.page;
+}
+
 // ── Footer year ───────────────────────────────────────────────────────────────
 footerYear.textContent = new Date().getFullYear();
 
